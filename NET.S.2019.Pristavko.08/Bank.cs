@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-
-namespace NET.S._2019.Pristavko._08
+﻿namespace NET.S._2019.Pristavko._08
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+
     public class Bank : IEnumerable
     {
-        string path = @"C:\BankAccount.txt";
-        public List<Bank> accounts;
+        private string path = @"C:\BankAccount.txt";
+        private List<Bank> accounts;
         private string id;
         private decimal ballance;
         private decimal discount;
@@ -17,7 +17,6 @@ namespace NET.S._2019.Pristavko._08
         private decimal bonusPoints;
         private string rate;
         
-
         public string Id
         {
             get => this.id;
@@ -132,18 +131,17 @@ namespace NET.S._2019.Pristavko._08
 
         public Bank(string id, decimal ballance, string fName, string sName, decimal bonusPoints, string rate)
         {
-            Id = id;
-            Ballance = ballance;
-            discount = 1;
-            FName = fName;
-            SName = sName;
-            BonusPoints = bonusPoints;
+            this.Id = id;
+            this.Ballance = ballance;
+            this.discount = 1;
+            this.FName = fName;
+            this.SName = sName;
+            this.BonusPoints = bonusPoints;
             this.rate = rate;
-            accounts = new List<Bank>();
+            this.accounts = new List<Bank>();
         }
 
         #endregion
-
 
         #region Public methods
 
@@ -154,29 +152,35 @@ namespace NET.S._2019.Pristavko._08
         public void PutMoney(decimal amount)
         {
             if (amount < 0)
+            {
                 throw new ArgumentException($"{nameof(amount)} can not be less than zero");
+            }
+
             switch (rate)
             {
                 case "Gold":
-                    discount = 2;
+                    this.discount = 2;
                     break;
                 case "Platinum":
-                    discount = 3;
+                    this.discount = 3;
                     break;
                 default:
-                    discount = 1;
+                    this.discount = 1;
                     break;
             }
-            Ballance += amount * discount;
-            Save(path);
+            this.Ballance += amount * this.discount;
+            Save(this.path);
         }
 
         public void TakeMoney(decimal amount)
         {
-            if (Ballance - amount < 0)
+            if (this.Ballance - amount < 0)
+            {
                 throw new ArgumentException($"{nameof(amount)} can not be less than ballance");
-            Ballance -= amount;
-            Save(path);
+            }
+
+            this.Ballance -= amount;
+            Save(this.path);
         }
 
         #endregion
@@ -185,7 +189,7 @@ namespace NET.S._2019.Pristavko._08
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
             {
-                foreach (Bank s in accounts)
+                foreach (Bank s in this.accounts)
                 {
                     writer.Write(s.Id);
                     writer.Write(s.Ballance);
@@ -196,7 +200,6 @@ namespace NET.S._2019.Pristavko._08
                 }
             }
         }
-
 
         public static List<Bank> Read(string path)
         {
@@ -216,6 +219,7 @@ namespace NET.S._2019.Pristavko._08
                     Accounts.Add(temp);
                 }
             }
+
             return Accounts;
         }
 
@@ -224,9 +228,10 @@ namespace NET.S._2019.Pristavko._08
             return $"[Id: {this.Id};\n HolderName: {this.SName}; " +
                 $"\n Balance: {this.Ballance}; \n BonusPoints: {this.BonusPoints};]";
         }
+
         public IEnumerator GetEnumerator()
         {
-            return accounts.GetEnumerator();
+            return this.accounts.GetEnumerator();
         }
     }
 }

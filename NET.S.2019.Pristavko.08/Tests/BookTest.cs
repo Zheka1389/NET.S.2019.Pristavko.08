@@ -1,14 +1,9 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NET.S._2019.Pristavko._08.Tests
+﻿namespace NET.S._2019.Pristavko._08.Tests
 {
-    class BookTest
+    using System.Globalization;
+    using NUnit.Framework;
+
+    public class BookTest
     {
         #region test string format
 

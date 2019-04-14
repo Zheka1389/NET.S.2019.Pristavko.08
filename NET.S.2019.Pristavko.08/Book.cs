@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-
-namespace NET.S._2019.Pristavko._08
+﻿namespace NET.S._2019.Pristavko._08
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+
     /// <summary>
     /// Book class.
     /// </summary>
@@ -321,6 +321,23 @@ namespace NET.S._2019.Pristavko._08
             throw new FormatException($"{format} is not supported");
         }
 
+        /// <summary>
+        /// Return numeric representation this book instance.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            var hashCode = -2103712403;
+            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.ISBN);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Author);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Title);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Publisher);
+            hashCode = (hashCode * -1521134295) + this.YearOfPublishing.GetHashCode();
+            hashCode = (hashCode * -1521134295) + this.Count.GetHashCode();
+            hashCode = (hashCode * -1521134295) + this.Price.GetHashCode();
+            return hashCode;
+        }
+
         #endregion
 
         #region Constructors
@@ -391,23 +408,6 @@ namespace NET.S._2019.Pristavko._08
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Return numeric representation this book instance.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            var hashCode = -2103712403;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ISBN);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Author);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Title);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Publisher);
-            hashCode = hashCode * -1521134295 + YearOfPublishing.GetHashCode();
-            hashCode = hashCode * -1521134295 + Count.GetHashCode();
-            hashCode = hashCode * -1521134295 + Price.GetHashCode();
-            return hashCode;
         }
 
         #endregion

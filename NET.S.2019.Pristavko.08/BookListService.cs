@@ -1,39 +1,35 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-namespace NET.S._2019.Pristavko._08
+﻿namespace NET.S._2019.Pristavko._08
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
     /// <summary>
     /// Implementation a service to work with list of <see cref="Book"/>.
     /// </summary>
     public class BookListService : IEnumerable
-    {
-        #region Private Fields 
-
-        private List<Book> books;
-
-        #endregion
+    {     
 
         public BookListService()
         {
-            books = new List<Book>();
+            this.books = new List<Book>();
         }
 
-        public int NumberOfBooks => books.Count;
+        public int NumberOfBooks => this.books.Count;
 
         #region Public Methods
 
         public void AddBook(Book book)
         {
-            if (books.Contains(book))
+            if (this.books.Contains(book))
+            {
                 throw new ArgumentException($"The book is alredy in the {nameof(books)} list");
+            }
 
-            books.Add(book);
+            this.books.Add(book);
         }
-
 
         /// <summary>
         /// Removes the given object from the list
@@ -45,10 +41,14 @@ namespace NET.S._2019.Pristavko._08
         public void RemoveBook(Book book)
         {
             if (book is null)
+            {
                 throw new ArgumentNullException($"The {nameof(book)} is null");
+            }
 
-            if (books.Contains(book))
-                books.Remove(book);
+            if (this.books.Contains(book))
+            {
+                this.books.Remove(book);
+            }
             else
             {
                 throw new ArgumentException("The list does not contain the given object");
@@ -62,9 +62,9 @@ namespace NET.S._2019.Pristavko._08
                 throw new ArgumentNullException();
             }
 
-            if (books != null)
+            if (this.books != null)
             {
-                foreach (Book bookInList in books)
+                foreach (Book bookInList in this.books)
                 {                  
                     if (bookInList.ToString().Contains(title.ToString()))
                     {
@@ -82,11 +82,10 @@ namespace NET.S._2019.Pristavko._08
 
         public void SortBooksByTag()
         {
-            var sortedBooks = from b in books
+            var sortedBooks = from b in this.books
                               orderby b.YearOfPublishing
                               select b;
-            books = new List<Book>(sortedBooks);
-
+            this.books = new List<Book>(sortedBooks);
         }
 
         #endregion
@@ -95,7 +94,7 @@ namespace NET.S._2019.Pristavko._08
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
             {
-                foreach (Book s in books)
+                foreach (Book s in this.books)
                 {
                     writer.Write(s.ISBN);
                     writer.Write(s.Author);
@@ -127,12 +126,19 @@ namespace NET.S._2019.Pristavko._08
                     t.AddBook(temp);
                 }
             }
+
             return t;
         }
 
         public IEnumerator GetEnumerator()
         {
-            return books.GetEnumerator();
+            return this.books.GetEnumerator();
         }
+
+        #region Private Fields 
+
+        private List<Book> books;
+
+        #endregion
     }
 }

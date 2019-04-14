@@ -1,38 +1,41 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace NET.S._2019.Pristavko._08
+﻿namespace NET.S._2019.Pristavko._08
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     public class BankAccount : IEnumerable
     {
-
-        public List<Bank> Accounts;
         public BankAccount()
         {
-            Accounts = new List<Bank>();
+            this.accounts = new List<Bank>();
         }
 
         public IEnumerator GetEnumerator()
         {
-            return Accounts.GetEnumerator();
+            return this.accounts.GetEnumerator();
         }
 
         public void AddBank(Bank account)
         {
-            if (Accounts.Contains(account))
+            if (this.accounts.Contains(account))
+            {
                 throw new ArgumentException($"The book is alredy in the {nameof(account)} list");
+            }
 
-            Accounts.Add(account);
+            this.accounts.Add(account);
         }
 
         public void RemoveBank(Bank account)
         {
-            if (Accounts.Contains(account))
+            if (this.accounts.Contains(account))
+            {
                 throw new ArgumentException($"The book is alredy in the {nameof(account)} list");
+            }
 
-            Accounts.Remove(account);
+            this.accounts.Remove(account);
         }
 
+        private List<Bank> accounts;
     } 
 }
