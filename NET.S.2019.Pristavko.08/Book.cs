@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace NET.S._2019.Pristavko._08
 {
@@ -275,25 +277,48 @@ namespace NET.S._2019.Pristavko._08
             return this.Price.CompareTo(other.Price);
         }
 
-
-        /// <summary>
-        /// Return numeric representation this book instance.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
-        public override int GetHashCode()
-        {
-            return this.ToString().GetHashCode();
-        }
-
         /// <summary>
         /// Converts <see cref="Book"/> states of this instance to its equvalent string representation.
         /// </summary>
         /// <returns>String.</returns>
         public override string ToString()
         {
-            string bookAsString = $"ISBN: {this.ISBN}; \nAutor: {this.Author}; \nName: {this.Title}; \nPublisher: {this.Publisher};" +
+            string bookAsString = $"ISBN: {this.ISBN}; \nAutor: {this.Author}; \nTitle: {this.Title}; \nPublisher: {this.Publisher};" +
                 $"\nYearOfPublishing: {this.YearOfPublishing}; \nCount: {this.Count}; \nPrice: {this.Price}";
             return bookAsString;
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (string.IsNullOrEmpty(format))
+            {
+                format = "IATPYCP";
+            }
+
+            if (formatProvider == null)
+            {
+                formatProvider = CultureInfo.CurrentCulture;
+            }
+
+            switch (format.ToUpperInvariant())
+            {
+                case "IATPYCP":
+                    return $"ISBN 13: {this.ISBN}, {this.Author}, {this.Title}, {this.Publisher}, {this.YearOfPublishing}, P. {this.Count}, {this.Price.ToString("C", formatProvider)}";
+                case "IATPYC":
+                    return $"ISBN 13: {this.ISBN}, {this.Author}, {this.Title}, {this.Publisher}, {this.YearOfPublishing}, P. {this.Count}";
+                case "IATPY":
+                    return $"ISBN 13: {this.ISBN}, {this.Author}, {this.Title}, {this.Publisher}, {this.YearOfPublishing}";
+                case "IATP":
+                    return $"ISBN 13: {this.ISBN}, {this.Author}, {this.Title}, {this.Publisher}";
+                case "ATPY":
+                    return $"{this.Author}, {this.Title}, {this.Publisher}, {this.YearOfPublishing}";
+                case "IAT":
+                    return $"ISBN 13: {this.ISBN}, {this.Author}, {this.Title}";
+                case "AT":
+                    return $"{this.Author}, {this.Title}";
+            }
+
+            throw new FormatException($"{format} is not supported");
         }
 
         #endregion
@@ -366,6 +391,23 @@ namespace NET.S._2019.Pristavko._08
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Return numeric representation this book instance.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            var hashCode = -2103712403;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ISBN);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Author);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Title);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Publisher);
+            hashCode = hashCode * -1521134295 + YearOfPublishing.GetHashCode();
+            hashCode = hashCode * -1521134295 + Count.GetHashCode();
+            hashCode = hashCode * -1521134295 + Price.GetHashCode();
+            return hashCode;
         }
 
         #endregion
